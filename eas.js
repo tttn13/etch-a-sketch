@@ -1,8 +1,12 @@
 const gridSquare = document.getElementById('container');
+const inputStorageID = "userInputStorage";
+function getUserInput() {
+    let userInput = prompt("Please enter grid sizes in numerical values(eg: 16 16 or 5 5 etc)").split(" ");
+    localStorage.setItem(inputStorageID, JSON.stringify(userInput));
+    return userInput;
+}
 
-
-function gameInit() {
-    var userInput = prompt("Please enter grid sizes (eg: 16 16 or 13 13 etc)").split(" ");
+function gameInit(userInput) {
     createGrid(userInput[0], userInput[1]);
     const cells = document.querySelectorAll('.gridCell');
     cells.forEach((gridCell) => {
@@ -12,14 +16,14 @@ function gameInit() {
     })
 }
 
-function resetGame() {
+function clearColor() {
     const cells = document.querySelectorAll('.gridCell');
     cells.forEach((gridCell) => {
         gridCell.style.backgroundColor = "";
     })
 }
 
-function clearDiv() {
+function resetGame() {
     gridSquare.innerHTML = "";
 }
 
@@ -37,14 +41,25 @@ function createGrid(gridWidth, gridHeight) {
         }
     }
 }
+const loadfromStorage = () => {
+    let userInputFromStorage = JSON.parse(localStorage.getItem(inputStorageID));
+    if (userInputFromStorage != null) {
+        const user_input = userInputFromStorage;
+        gameInit(user_input);
+    } else { gameInit(getUserInput()) };
+    
+}
 
-var clearBtn = document.getElementById('clear');
+const clearBtn = document.getElementById('clear');
 clearBtn.addEventListener('click', function() {
+    clearColor();
     resetGame();
-    clearDiv();
-    gameInit();
+    loadfromStorage();
 });
 
+const newGameBtn = document.getElementById('new-game');
+newGameBtn.addEventListener('click', function() { 
+    gameInit(getUserInput());
+});
 
-
-
+clearBtn.click();
