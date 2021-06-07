@@ -62,4 +62,4 @@ newGameBtn.addEventListener('click', function() {
     gameInit(getUserInput());
 });
 
-clearBtn.click();
+clearBtn.click()
